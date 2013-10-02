@@ -1,0 +1,70 @@
+<script type="text/mustache" id="conditions_table">
+  <table class="listing">
+    <thead>
+      <th>Tag</th><th>Valori</th><th/>
+    </thead>
+    <tbody>
+      {{#conditions}}
+      <tr {{data 'condition'}} class="odd">
+        <td>{{#if tag}}{{tag.name}}{{/if}}</td>
+        <td>
+          {{#if tag}}
+          {{#if tag.isBoolean}}
+          {{getBooleanAnswer}}
+          {{/if}}
+          {{#if tag.isNumeric}}
+          {{values.min}} &nbsp;&mdash;&nbsp; {{values.max}}
+          {{/if}}
+          {{#if tag.isChoice}}
+          <ul>
+            {{#values.value}}
+            <li>{{text}}}</li>
+            {{/values.value}}
+          </ul>
+          {{/if}}
+          {{/if}}
+        </td>
+        <td>
+          {{button "edit.condition" "modifica"}}
+          {{button "delete.condition" "elimina"}}
+        </td>
+      </tr>
+      {{/conditions}}
+    </tbody>
+  </table>
+  <div>{{button "add.condition" "aggiungi"}}</div>
+</script>
+
+<script type="text/mustache" id="condition_edit">
+  <div class="form">
+    <div>
+      {{label "tag.name" "Domanda:"}}
+      <select {{field condition.tag name="tag" options=tags value_name="id" label_name="name" set_scalar=false}} />
+    </div>
+    <div>
+      {{label "values" "Valori:"}}
+      {{#if condition.tag}}
+      {{#if condition.tag.isNumeric}}
+      {{label "min.value" "Minimo:"}}
+      <input {{field condition.values.min name="min"}} />
+      {{label "max.value" "Massimo:"}}
+      <input {{field condition.values.max name="max"}} />
+      {{/if}}
+      {{#if condition.tag.isBoolean}}
+      <select {{field condition.values.value options=boolean_options name="value"}} />
+      {{/if}}
+      {{#if condition.tag.isChoice}}
+      <select {{field condition.values.value options=condition.choicesByIndex multiple=true set_scalar=false}} />
+      {{/if}}
+      {{/if}}
+    </div>
+  </div>
+  <div class="actions">
+    {{#if condition.errors}}
+    {{button "save.condition" "conferma modifiche condizione" disabled="disabled" class="close"}}
+    {{else}}
+    {{button "save.condition" "conferma modifiche condizione" class="close"}}
+    {{/if}}
+    {{button "cancel.condition" "annulla modifiche condizione" class="close"}}
+  </div>
+</script>

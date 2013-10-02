@@ -1,0 +1,30 @@
+<script type="text/mustache" id="tags_table">
+  <table class="listing">
+    <thead>
+      <th> Nome </th><th> Tipo</th><th/>
+    </thead>
+    <tbody>
+      {{#tags}}
+      <tr {{data 'tag'}} class="odd">
+        {{#if edit}}
+        <td><input {{field name name="name" type="text"}}/></td>
+        <td><select {{field type name="type" options=tag_types}}/></td>
+        <td>
+          {{#if errors}}
+          {{button "save" "conferma" disabled="disabled"}}
+          {{else}}
+          {{button "save" "conferma"}}
+          {{/if}}
+          {{button "cancel" "annulla"}}
+        </td>
+        {{else}}
+        <td>{{name}}</td>
+        <td>{{label}}</td>
+        <td>{{button "edit" "modifica"}} {{button "delete" "elimina"}}</td>
+        {{/if}}
+      </tr>
+      {{/tags}}
+    </tbody>
+  </table>
+  <div>{{button "add" "aggiungi"}}</div>
+</script>

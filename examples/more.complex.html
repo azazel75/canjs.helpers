@@ -1,0 +1,119 @@
+<script type="text/mustache" id="questions_table">
+  <table class="listing">
+    <thead>
+      <th>Nome breve</th><th>Domanda</th><th>Tipo</th>
+      <th>Risposte possibili</th><th># Condizioni</th><th/>
+    </thead>
+    <tbody>
+      {{#questions}}
+      <tr {{data 'question'}} class="odd">
+        <td>{{tag.name}}</td>
+        <td>{{body}}</td>
+        <td>{{tag.label}}</td>
+        <td>
+          {{#if tag.isBoolean}}
+          {{#if tag.answers}}
+          {{#tag.answers}}
+          <dl>
+            <dt> Vero:</dt>
+            {{#if yes}}
+            <dd>{{yes}}</dd>
+            {{else}}
+            <dd>Sì</dd>
+            {{/if}}
+            <dt> Falso:</dt>
+            {{#if no}}
+            <dd>{{no}}</dd>
+            {{else}}
+            <dd>No</dd>
+            {{/if}}
+          </dl>
+          {{/tag.answers}}
+          {{/if}}
+          {{/if}}
+          {{#if tag.isChoice}}
+          {{#if tag.answers}}
+          <ol>
+            {{#tag.answers}}
+            <li> {{#if value}}{{value}}{{/if}}</li>
+            {{/tag.answers}}
+          </ol>
+          {{/if}}
+          {{/if}}
+        </td>
+        <td>{{conditions.length}}</td>
+        <td>{{button "edit" "modifica"}} {{button "delete" "elimina"}}</td>
+      </tr>
+      {{/questions}}
+    </tbody>
+  </table>
+  <div>{{button "add" "aggiungi"}}</div>
+</script>
+
+
+<script type="text/mustache" id="edit_form">
+  <div class="form">
+    <div>
+      {{label "conditions" "Precondizioni:"}}
+      <div id="conditions"></div>
+      <div id="condition"></div>
+    </div>
+    <div>
+      {{label "tag.name" "Nome breve:"}}
+      <input {{field question.tag.name name="tag.name"}} />
+    </div>
+    <div>
+      {{label "body" "Domanda:"}}
+      <textarea {{field question.body name="body"}} />
+    </div>
+    <div>
+      {{label "tag.type" "Tipo:"}}
+      <select {{field question.tag.type name="tag.type" options=tag_types}}/>
+    </div>
+    <div>
+      {{#with question.tag}}
+      {{#if isChoice}}
+      {{label "answers" "Risposte possibili:"}}
+      <ol>
+        {{#answers}}
+        {{#with .}}
+        <li {{data 'answer'}}>
+          <input {{field value}}/>
+          {{button "delete.choice" "elimina"}}
+        </li>
+        {{/with}}
+        {{/answers}}
+      </ol>
+      <div>{{button "add.choice" "aggiungi"}}</div>
+      {{/if}}
+      {{#if isBoolean}}
+      {{label "answers" "Etichette opzionali per le condizioni vero o falso:"}}
+      <ul>
+        {{#answers}}
+        {{#with .}}
+        <li {{data 'answer'}}>
+          {{label "boolean.true" "vero:"}}
+          <input {{field yes name="boolean.true" placeholder="Sì"}}/>
+          {{button "reset.boolean.true" "elimina etichetta"}}
+        </li>
+        <li {{data 'answer'}}>
+          {{label "boolean.false" "falso:"}}
+          <input {{field no name="boolean.false" placeholder="No"}}/>
+          {{button "reset.boolean.false" "elimina etichetta"}}
+        </li>
+        {{/with}}
+        {{/answers}}
+      </ul>
+      {{/if}}
+      {{/with}}
+    </div>
+  </div>
+  <div id="outer_actions" class="actions">
+    {{#if question.errors}}
+    {{button "save" "conferma" disabled="disabled" class="close"}}
+    {{else}}
+    {{button "save" "conferma" class="close"}}
+    {{/if}}
+    {{button "cancel" "annulla" class="close"}}
+  </div>
+</script>
